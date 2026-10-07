@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Billing Throughput &amp; Cash Risk &mdash; CTO Executive Summary</title>
+<style>
+:root{
+--primary:#0A0A0A;--accent:#E8D100;--green:#4A5A22;--orange:#C99700;--red:#B3261E;
+--bg:#FFFFFF;--zebra:#F8F8F6;--border:#E6E4DC;--text:#1C1C1C;--muted:#7A7A74;
+--olive-tint:#EEF1E4;--bad-tint:#FBEDEB;--warn-tint:#FBF4DF;--act-tint:#FFF6D6;
+--font:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+--fs-h1:23px;--fs-title:14px;--fs-stat:28px;--fs-label:10px;--fs-body:12.5px;--fs-table:12px;--fs-badge:9.5px
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;font-size:var(--fs-body);-webkit-font-smoothing:antialiased}
+
+/* ---------- header ---------- */
+.header{background:var(--primary);color:#fff;padding:20px 32px;position:relative;overflow:hidden;display:flex;align-items:center;min-height:30px}
+.header h1{font-family:var(--font);font-size:var(--fs-h1);font-weight:700;letter-spacing:-.01em}
+.hero-chevrons{position:absolute;right:40px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px}
+.hero-chevrons span{width:46px;height:100px;background:var(--accent);clip-path:polygon(0 0,55% 0,100% 50%,55% 100%,0 100%,45% 50%)}
+.hero-chevrons span:nth-child(1){opacity:.55}
+.hero-chevrons span:nth-child(2){opacity:.28}
+.hero-chevrons span:nth-child(3){opacity:.12}
+.brand-mark{width:22px;height:22px;background:var(--accent);clip-path:polygon(0 0,55% 0,100% 50%,55% 100%,0 100%,45% 50%);display:inline-block;vertical-align:middle;margin-right:12px}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;flex-wrap:wrap;background:var(--primary);padding:0 32px;position:sticky;top:0;z-index:100;border-top:1px solid rgba(255,255,255,.08)}
+.tab{padding:13px 22px;cursor:pointer;font-size:12.5px;font-weight:700;letter-spacing:.02em;color:#9A9A93;border-bottom:3px solid transparent;transition:.2s}
+.tab span{display:block;font-size:9px;font-weight:400;opacity:.55;margin-top:2px;letter-spacing:0}
+.tab:hover{color:var(--accent)}
+.tab.active{color:#fff;border-bottom-color:var(--accent)}
+
+/* ---------- layout ---------- */
+.content{max-width:1360px;margin:0 auto;padding:20px 24px 40px}
+.section{display:none}
+.section.active{display:block}
+
+/* ---------- card ---------- */
+.card{background:#fff;border-radius:12px;padding:20px 22px;margin-bottom:14px;border:1px solid var(--border);box-shadow:0 1px 2px rgba(10,10,10,.03),0 6px 16px rgba(10,10,10,.04)}
+.card h3{font-size:var(--fs-title);font-weight:700;color:var(--primary);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;letter-spacing:-.005em}
+.card h3::before{content:'';width:4px;height:15px;background:var(--accent);border-radius:2px;flex-shrink:0}
+.card p{font-size:var(--fs-body);color:#4a4a46;margin-bottom:6px}
+
+/* ---------- stat tiles: one uniform size for every number on every page ---------- */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:4px}
+.stat{background:#fff;border:1px solid var(--border);border-top:3px solid var(--border);border-radius:10px;padding:16px 14px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.stat .n{font-size:var(--fs-stat);font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;line-height:1.1;white-space:nowrap}
+.stat .l{font-size:var(--fs-label);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:9px;line-height:1.5}
+.stat.red{border-top-color:var(--red);background:var(--bad-tint)}
+.stat.red .n{color:var(--red)}
+.stat.orange{border-top-color:var(--orange);background:var(--warn-tint)}
+.stat.orange .n{color:var(--orange)}
+.stat.green{border-top-color:var(--green);background:var(--olive-tint)}
+.stat.green .n{color:var(--green)}
+.stat.neutral{border-top-color:var(--primary)}
+
+/* ---------- tables ---------- */
+.table-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:10px}
+.table-wrap table{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:var(--fs-table)}
+th{background:var(--primary);color:#fff;padding:9px 10px;text-align:left;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:var(--fs-table)}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even){background:var(--zebra)}
+tr:hover td{background:#F0EFE6}
+
+/* ---------- badges ---------- */
+.badge{display:inline-block;padding:3px 9px;border-radius:9px;font-size:var(--fs-badge);font-weight:700;letter-spacing:.02em}
+.badge-red{background:#FBEDEB;color:var(--red)}
+.badge-orange{background:#fef3e2;color:#c9770d}
+.badge-green{background:#EEF1E4;color:var(--green)}
+.badge-blue{background:#e8f0fe;color:#1a73e8}
+
+/* ---------- insight callouts ---------- */
+.insight{padding:11px 15px;margin:8px 0;border-left:3px solid var(--green);background:var(--olive-tint);border-radius:8px;font-size:var(--fs-body);color:#333}
+.insight.critical{border-left-color:var(--red);background:var(--bad-tint)}
+.insight.warning{border-left-color:var(--orange);background:var(--warn-tint)}
+.insight strong{color:var(--primary)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* ---------- throughput flow diagram ---------- */
+.flow{display:flex;align-items:center;justify-content:center;gap:0;margin:18px 0;flex-wrap:wrap}
+.flow-box{padding:14px 26px;border-radius:10px;font-size:13px;font-weight:700;text-align:center;min-width:150px}
+.flow-arr{font-size:22px;color:#ccc;padding:0 10px}
+
+/* ---------- key message banner ---------- */
+.key-msg{background:var(--primary);border-left:6px solid var(--accent);border-radius:0 12px 12px 0;padding:22px 28px;margin-bottom:16px;position:relative}
+.key-msg .page-num{position:absolute;left:-1px;top:-8px;background:var(--accent);color:var(--primary);font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:0 0 6px 0;letter-spacing:1px}
+.key-msg p{font-size:20px;font-weight:700;color:#fff;line-height:1.45;margin:0;letter-spacing:-.005em}
+.key-msg p span{color:var(--accent)}
+.key-msg .so-what{font-size:11.5px;font-weight:700;color:var(--accent);margin-top:10px;display:block;letter-spacing:.04em;text-transform:uppercase}
+
+/* ---------- closing banner ---------- */
+.msg-box{background:var(--primary);color:#fff;border-radius:12px;padding:16px 22px;margin-top:16px}
+.msg-box p{color:#ddd;font-size:13.5px;line-height:1.6}
+.msg-box strong{color:var(--accent)}
+
+/* ---------- owner cards ---------- */
+.owner-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.owner-head .badge{font-size:10.5px;padding:4px 11px}
+.owner-head h3{font-size:14px;font-weight:700;color:var(--primary)}
+.act-cell{background:var(--act-tint);font-weight:700;color:#1C1C1C}
+details{margin-top:10px}
+details summary{cursor:pointer;font-size:11.5px;color:#1a73e8;font-weight:600;padding:4px 0;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:'\25B8  '}
+details[open] summary::before{content:'\25BE  '}
+details .detail-body{font-size:11.5px;color:#444;padding:8px 0 2px}
+details .detail-body ol,details .detail-body ul{padding-left:18px;margin-top:4px}
+details .detail-body li{margin-bottom:3px}
+
+footer{text-align:center;padding:18px;font-size:10.5px;color:#999;border-top:1px solid var(--border)}
+
+@media(max-width:900px){.two-col{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr}.tabs{padding:0 10px}.content{padding:14px}.header{padding:18px 16px}}
+</style></head><body>
+
+<div class="header"><div class="hero-chevrons" aria-hidden="true"><span></span><span></span><span></span></div>
+<h1><span class="brand-mark" aria-hidden="true"></span>Billing Throughput &amp; Cash Risk &mdash; CTO Executive Summary</h1>
+</div>
+
+<div class="tabs">
+<div class="tab active" onclick="go('p1')">01 DIAGNOSE<span>Where is the problem?</span></div>
+<div class="tab" onclick="go('p2')">02 PRIORITIZE<span>Where is cash at risk?</span></div>
+<div class="tab" onclick="go('p3')">03 ACT<span>What should we do today?</span></div>
+</div>
+
+<div class="content">
+
+<!-- PAGE 1: DIAGNOSE -->
+<div id="p1" class="section active">
+
+<div class="key-msg"><div class="page-num">PAGE 01</div>
+<p>Of <span>8.66M</span> cases, most flow fine. A few places don&rsquo;t &mdash; <span>BE11</span> and <span>DE11</span> carry the fat tail.</p>
+<span class="so-what">SO WHAT &rarr; Fix the billing tail in two sales orgs and the throughput problem is mostly solved.</span>
+</div>
+
+<div class="card"><h3>8.66M Cases &mdash; Normal vs. Tail</h3>
+<div class="stat-row">
+<div class="stat neutral"><div class="n">8.66M</div><div class="l">Total Cases Assessed</div></div>
+<div class="stat green"><div class="n">82.4%</div><div class="l">Normal &middot; 7.13M cases, avg 0.1d</div></div>
+<div class="stat orange"><div class="n">12.7%</div><div class="l">Medium &middot; 1.10M cases, avg 4.9d</div></div>
+<div class="stat red"><div class="n">4.9%</div><div class="l">Fat Tail (High+Extreme) &middot; 0.43M cases</div></div>
+</div>
+</div>
+
+<div class="card"><h3>Where Throughput Breaks</h3>
+<div class="flow"><div class="flow-box" style="background:var(--olive-tint);color:var(--green)">EDATU &rarr; GGI<br><span style="font-weight:400;font-size:11px">Avg &minus;0.6d &middot; on time</span></div><div class="flow-arr" style="font-size:32px;color:var(--red)">&rArr;</div><div class="flow-box" style="background:var(--bad-tint);color:var(--red);border:2px solid var(--red)">Create Invoice<br><span style="font-weight:400;font-size:11px">Avg 2.5d &middot; <strong>96% of delay</strong></span></div></div>
+<div class="two-col" style="margin-top:6px"><div class="table-wrap"><table>
+<tr><th>Sales Org</th><th>Cases</th><th>Avg Days</th><th>Tail Rate</th><th>Signal</th></tr>
+<tr><td><strong>BE11</strong></td><td>2.52M</td><td style="color:var(--red);font-weight:700">3.1</td><td style="font-weight:700">7.2%</td><td><span class="badge badge-red">SLOW</span></td></tr>
+<tr><td><strong>DE11</strong></td><td>1.17M</td><td>0.3</td><td style="font-weight:700;color:var(--red)">8.9%</td><td><span class="badge badge-red">FAT TAIL</span></td></tr>
+<tr><td>GB11</td><td>548K</td><td style="color:var(--orange)">2.3</td><td style="font-weight:700">5.6%</td><td><span class="badge badge-orange">3PL GAP</span></td></tr>
+<tr><td>IT01</td><td>177K</td><td>0.7</td><td style="font-weight:700;color:var(--red)">7.6%</td><td><span class="badge badge-red">FAT TAIL</span></td></tr>
+<tr><td>SE11 / LU01</td><td>369K</td><td style="color:var(--green)">&minus;1.2 / 0.5</td><td>&le;1.6%</td><td><span class="badge badge-green">BEST</span></td></tr>
+</table></div>
+<div><div class="insight critical"><strong>96% of delay</strong> sits in one step: GGI &rarr; Invoice. Logistics is not the bottleneck &mdash; billing is.</div>
+<div class="insight warning"><strong>BE11 + DE11 = 67%</strong> of all High+Extreme cases (285,640), on just 43% of volume.</div></div></div>
+</div>
+
+<div class="card"><h3>Materiality &mdash; When Delay Becomes Cash Impact</h3>
+<div class="stat-row" style="grid-template-columns:repeat(2,1fr)">
+<div class="stat red"><div class="n">$134.6M</div><div class="l">Invoice Value Pushed to Next Month</div></div>
+<div class="stat orange"><div class="n">17.1d</div><div class="l">Avg Delay That Triggers the Push</div></div>
+</div>
+<div class="insight critical"><strong>Push risk compounds fast: 4% &rarr; 17.5% &rarr; 58.5%</strong> as delay crosses Medium &rarr; High &rarr; Extreme. Past 7 days, the cash-month push is near-certain.</div>
+</div>
+
+<div class="msg-box"><p><strong>Diagnosis:</strong> billing speed, not logistics &mdash; concentrated in two sales orgs &mdash; <strong>$134.6M</strong> of cash landed in the wrong month. <strong>&rarr; Next: what&rsquo;s open today.</strong></p></div>
+</div>
+
+<!-- PAGE 2: PRIORITIZE -->
+<div id="p2" class="section">
+<div class="key-msg"><div class="page-num">PAGE 02</div>
+<p><span>$966M</span> shipped, not billed. <span>$25.4M</span> of working capital is sitting on the table right now.</p>
+<span class="so-what">SO WHAT &rarr; This is an execution gap, not an analytics gap.</span>
+</div>
+
+<div class="card"><h3>$966M Open &mdash; The Opportunity</h3>
+<div class="stat-row" style="grid-template-columns:repeat(2,1fr)">
+<div class="stat red"><div class="n">$966.0M</div><div class="l">Unbilled Value &middot; 6,127 Open Orders</div></div>
+<div class="stat red"><div class="n">$25.4M</div><div class="l">Working-Capital Opportunity</div></div>
+</div>
+</div>
+
+<div class="card"><h3>AI Classification &mdash; What the Behavior Says</h3>
+<p style="margin-bottom:12px">AI reads case behavior and trend to sort every open item into one of three buckets, in value terms:</p>
+<div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+<div class="stat green"><div class="n">$941.3M</div><div class="l">Clears Normally &middot; 3,155 cases</div></div>
+<div class="stat orange"><div class="n">$24.7M</div><div class="l">Needs Investigation &middot; 2,946 cases</div></div>
+<div class="stat red"><div class="n">$3,853</div><div class="l">Hard Exceptions &middot; 26 cases</div></div>
+</div>
+<div class="insight warning">Left alone, &ldquo;Needs Investigation&rdquo; cases don&rsquo;t self-clear &mdash; they have no billing block, so they age quietly until someone looks.</div>
+</div>
+
+<div class="card"><h3>Where the $25.4M Sits</h3>
+<div class="two-col">
+<div class="table-wrap"><table>
+<tr><th>Sales Org</th><th>WC Cost</th><th>Share</th><th>Meaning</th></tr>
+<tr><td><strong>GB11</strong></td><td style="text-align:right;font-weight:700;color:var(--red)">$22.6M</td><td style="text-align:right;font-weight:700">88.8%</td><td>Dominant &middot; 3PL/billing handoff</td></tr>
+<tr><td>IE11</td><td style="text-align:right">$1.25M</td><td style="text-align:right">4.9%</td><td>Secondary gap</td></tr>
+<tr><td>BE11</td><td style="text-align:right">$1.11M</td><td style="text-align:right">4.4%</td><td>Events / horeca</td></tr>
+<tr><td>DE11 / NL01 / Other</td><td style="text-align:right">$500K</td><td style="text-align:right">2.0%</td><td>Not material at exec level</td></tr>
+</table></div>
+<div><div class="insight critical"><strong>GB11 is the value problem.</strong> One sales org drives 89% of the WC drag &mdash; a single systemic fix, not six separate ones.</div>
+<div class="insight">Roughly half of all open cases carry no billing block at all (&ldquo;ghost SNB&rdquo;) &mdash; the control gap behind the investigation queue.</div></div>
+</div>
+</div>
+
+<div class="msg-box"><p><strong>Prioritization:</strong> $966M located, $25.4M at stake. GB11 alone is 89% of the drag &mdash; most of that value is easy to release. <strong>&rarr; Next: who acts this week.</strong></p></div>
+</div><!-- /p2 -->
+
+<!-- PAGE 3: ACT -->
+<div id="p3" class="section">
+<div class="key-msg"><div class="page-num">PAGE 03</div>
+<p><span>$40.5M</span> is prioritized for action this week, out of the full <span>$966M</span> open book.</p>
+<span class="so-what">SO WHAT &rarr; Owner accountability, not theory.</span>
+</div>
+
+<div class="card"><h3>This Week&rsquo;s Action Queue</h3>
+<div class="stat-row">
+<div class="stat red"><div class="n">$40.5M</div><div class="l">This Week&rsquo;s Value &middot; 2,271 Orders</div></div>
+<div class="stat red"><div class="n">$952.7M</div><div class="l">GB11 / IE11 &middot; Primary Watchlist</div></div>
+<div class="stat green"><div class="n">593</div><div class="l">BE11 + NL01 &middot; Prevention Queue</div></div>
+<div class="stat green"><div class="n">$925.5M</div><div class="l">Remaining Book &middot; Monitored</div></div>
+</div>
+</div>
+
+<!-- OWNER 1: GB11 -->
+<div class="card">
+<div class="owner-head"><span class="badge badge-red">Owner 1</span><h3 style="border:none;padding:0;margin:0">GB01 MAGOR &mdash; Zuzana Klikarova / Konstantin Rudetckii (GB11, IE11)</h3></div>
+<div class="insight critical"><strong>89% of total WC drag ($22.6M)</strong> &mdash; a systemic 3PL handoff failure, not scattered cases.</div>
+<div class="table-wrap"><table>
+<tr><th>P</th><th>Sales Order</th><th>Customer</th><th>Risk</th><th>Value</th><th>To Flip</th><th style="width:28%">Action</th></tr>
+<tr><td><span class="badge badge-red">P1</span></td><td style="font-family:monospace">0023227891</td><td>Musgrave Kilcock</td><td><span class="badge badge-red">HIGH</span></td><td style="text-align:right;font-weight:700">$72,533</td><td style="text-align:right;font-weight:700;color:var(--red)">6d</td><td class="act-cell">Confirm 3PL delivery, release block, invoice within 48h.</td></tr>
+<tr><td><span class="badge badge-blue">P6</span></td><td style="font-family:monospace">0023230534</td><td>KNDL Coventry RDC</td><td><span class="badge badge-green">LOW</span></td><td style="text-align:right">$12,908</td><td style="text-align:right">&gt;14d</td><td class="act-cell">Comfortable margin &mdash; clear while queue is open.</td></tr>
+</table></div>
+<details><summary>Full GB11 queue &mdash; ~1,200 cases, $800M+ unbilled</summary>
+<div class="detail-body"><ol><li>Confirm delivery status in LIKP and shipment completion with 3PL</li><li>If dispatched: release billing block and run VF06 same day</li><li>If not delivered: separate logistics issues from interface failures</li><li>Escalate the 3PL confirmation interface as a structural fix</li></ol></div></details>
+</div>
+
+<!-- OWNER 2: BE11 nancy -->
+<div class="card">
+<div class="owner-head"><span class="badge badge-orange">Owner 2</span><h3 style="border:none;padding:0;margin:0">BE09 Anderlecht DC &mdash; Nancy Leclercq / Evert Haagen (BE11)</h3></div>
+<div class="insight warning"><strong>COLRUYT cluster, 1 day to flip</strong> &mdash; batch-release today. 2,020 orders total, 14 are P1+P2.</div>
+<div class="table-wrap"><table>
+<tr><th>P</th><th>Sales Order</th><th>Customer</th><th>Risk</th><th>Value</th><th>To Flip</th><th style="width:28%">Action</th></tr>
+<tr><td><span class="badge badge-red">P1</span></td><td style="font-family:monospace">0023225678</td><td>Colruyt DC Ollignies</td><td><span class="badge badge-red">CRITICAL</span></td><td style="text-align:right;font-weight:700">$72,504</td><td style="text-align:right;font-weight:700;color:var(--red)">1d</td><td class="act-cell">Release Block 08 &rarr; VF06 today.</td></tr>
+<tr><td><span class="badge badge-red">P1</span></td><td style="font-family:monospace">0023232256</td><td>Colruyt RT Logistics</td><td><span class="badge badge-red">CRITICAL</span></td><td style="text-align:right;font-weight:700">$69,632</td><td style="text-align:right;font-weight:700;color:var(--red)">1d</td><td class="act-cell">Batch with all BE11 Block 08 cases.</td></tr>
+<tr><td><span class="badge badge-red">P2</span></td><td style="font-family:monospace">0023232252</td><td>Colruyt RT Logistics</td><td><span class="badge badge-red">CRITICAL</span></td><td style="text-align:right;font-weight:700">$69,632</td><td style="text-align:right;font-weight:700;color:var(--red)">1d</td><td class="act-cell">Ghost SNB &mdash; check LIKP + VF04.</td></tr>
+</table></div>
+<details><summary>Full BE09 queue &mdash; 2,020 orders, $2.9M value</summary>
+<div class="detail-body"><p><strong>Events concentration:</strong> VIP RW / Live Nation / Werchter Festival &mdash; long-aging no-block orders need structural investigation.</p><ol><li>Check delivery document status (LIKP-WBSTK)</li><li>Check shipment completion (VTTK-STTRG)</li><li>Check billing due list (VF04) inclusion</li><li>If clear, process via VF01 and document root cause</li></ol></div></details>
+</div>
+
+<!-- OWNER 3: BE11 bieke -->
+<div class="card">
+<div class="owner-head"><span class="badge badge-orange">Owner 3</span><h3 style="border:none;padding:0;margin:0">BE10 Leuven DC &mdash; Bieke Zaman / Cindy Willaerts (BE11)</h3></div>
+<div class="insight warning"><strong>Mixed queue, 623 orders</strong> &mdash; chronic events/horeca cases alongside recent easy blocks. Separate the two before acting.</div>
+<div class="table-wrap"><table>
+<tr><th>P</th><th>Sales Order</th><th>Customer</th><th>Risk</th><th>Value</th><th>Age / To Flip</th><th style="width:28%">Action</th></tr>
+<tr><td><span class="badge badge-green">P3</span></td><td style="font-family:monospace">0023220630</td><td>Lambrechts</td><td><span class="badge badge-orange">MODERATE</span></td><td style="text-align:right;font-weight:700">$79,601</td><td style="text-align:right">12d</td><td class="act-cell">Release before it escalates to Critical.</td></tr>
+<tr><td><span class="badge badge-red">P5</span></td><td style="font-family:monospace">0022803397</td><td>Tomorrowland Festival</td><td><span class="badge badge-red">CHRONIC</span></td><td style="text-align:right">$42,016</td><td style="text-align:right;color:var(--red)">125d</td><td class="act-cell">4 months pushed &mdash; escalate or write off.</td></tr>
+</table></div>
+<details><summary>Full BE10 queue &mdash; 623 orders, $2.3M value</summary>
+<div class="detail-body"><p><strong>Events/horeca chronic cases:</strong> investigate VF06 billing-run inclusion and events-segment billing config &mdash; these are systemic, not individual failures.</p><p style="margin-top:4px"><strong>Recent Block 08 cases:</strong> batch-clear where delivery is complete, run VF06 for all eligible orders.</p></div></details>
+</div>
+
+<!-- OWNER 4: NL01 -->
+<div class="card">
+<div class="owner-head"><span class="badge badge-blue">Owner 4</span><h3 style="border:none;padding:0;margin:0">NL08&ndash;NL17 &mdash; Erik van Dijk / Katrien van Praet / Andrei Boloni (NL01)</h3></div>
+<div class="insight critical"><strong>Albert Heijn LDC &mdash; 5 days to flip, P1 Act Now.</strong> Queue also carries the highest-value P3 prevention case and a $5.8M release queue.</div>
+<div class="table-wrap"><table>
+<tr><th>P</th><th>Sales Order</th><th>Customer</th><th>Risk</th><th>Value</th><th>To Flip</th><th style="width:28%">Action</th></tr>
+<tr><td><span class="badge badge-red">P1</span></td><td style="font-family:monospace">0023234891</td><td>Albert Heijn LDC</td><td><span class="badge badge-red">HIGH</span></td><td style="text-align:right;font-weight:700">$66,502</td><td style="text-align:right;font-weight:700;color:var(--red)">5d</td><td class="act-cell">Confirm shipment at Eersel DC, release, VF06.</td></tr>
+<tr><td><span class="badge badge-green">P3</span></td><td style="font-family:monospace">0023144599</td><td>Drankenhandel Van Dorst</td><td><span class="badge badge-orange">MODERATE</span></td><td style="text-align:right;font-weight:700">$117,294</td><td style="text-align:right">12d</td><td class="act-cell">Release Block 08 and invoice this week.</td></tr>
+</table></div>
+<details><summary>Full NL01 queue &mdash; 1,552 orders, $6.9M value</summary>
+<div class="detail-body"><p>998 orders (Erik/Katrien) + 182 orders (Andrei) + 372 others. Focus on <strong>NL10 (278 cases)</strong> for returns/empties processing.</p><ol><li>Start with NL10 returns/empties sales orders</li><li>Check billing-due list inclusion and return billing type config for VF06</li><li>For eligible orders, run billing immediately</li></ol></div></details>
+</div>
+
+<!-- OWNER 5: DE11 -->
+<div class="card">
+<div class="owner-head"><span class="badge badge-green">Owner 5</span><h3 style="border:none;padding:0;margin:0">DE11 Munich &mdash; Amelie Brinker</h3></div>
+<div class="insight"><strong>Fat-tail prevention:</strong> DE11 carries 52.5% of historical NDD push value ($70.7M). 202 P3 cases this week &mdash; clear them before they become next week&rsquo;s emergency.</div>
+<div class="table-wrap"><table>
+<tr><th>Orders</th><th>P1+P2</th><th>P3</th><th>Monitored</th><th>Value</th><th style="width:28%">This Week&rsquo;s Action</th></tr>
+<tr><td style="font-weight:700">633</td><td style="color:var(--red)">3</td><td style="font-weight:700">202</td><td>428</td><td>$1.5M</td><td class="act-cell">Weekly P3 batch clearing &mdash; prevent escalation to P1.</td></tr>
+</table></div>
+</div>
+
+<div class="msg-box"><p><strong>Action:</strong> 5 named owners now control <strong>2,271 orders &middot; $40.5M</strong> this week &mdash; GB11/IE11 for value, BE11 and NL01/DE11 for release and prevention.</p></div>
+</div><!-- /p3 -->
+
+</div><!-- /content -->
+
+<footer>Billing Throughput &amp; Cash Risk &mdash; CTO Executive Summary &middot; Confidential &middot; FY26 (Oct 2025+) &middot; All EUR Sales Orgs &middot; 8,660,502 ZOR Cases &middot; Source: Databricks Process Mining</footer>
+
+<script>function go(id){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById(id).classList.add('active');event.currentTarget.classList.add('active');}</script>
+</body></html>
